@@ -288,7 +288,6 @@ bool HackStudioWidget::open_file(const String& full_filename)
     if (filename.starts_with(m_project->root_path()))
         relative_file_path = filename.substring(m_project->root_path().length() + 1);
 
-    window()->set_title(String::formatted("{} - {} - Hack Studio", relative_file_path, m_project->name()));
     m_project_tree_view->update();
 
     current_editor_wrapper().set_filename(filename);
@@ -630,6 +629,8 @@ NonnullRefPtr<GUI::Action> HackStudioWidget::create_save_as_action()
         auto new_project_file = m_project->get_file(save_path.value());
         m_open_files.set(save_path.value(), *new_project_file);
         m_open_files_vector.append(save_path.value());
+
+        update_window_title();
     });
 }
 
@@ -826,6 +827,7 @@ Project& HackStudioWidget::project()
 void HackStudioWidget::set_current_editor_wrapper(RefPtr<EditorWrapper> editor_wrapper)
 {
     m_current_editor_wrapper = editor_wrapper;
+    update_window_title();
 }
 
 void HackStudioWidget::configure_project_tree_view()
@@ -1192,6 +1194,11 @@ void HackStudioWidget::update_gml_preview()
 {
     auto gml_content = current_editor_wrapper().filename().ends_with(".gml") ? current_editor_wrapper().editor().text() : "";
     m_gml_preview_widget->load_gml(gml_content);
+}
+
+void HackStudioWidget::update_window_title()
+{
+    window()->set_title(String::formatted("{} - {} - Hack Studio", m_current_editor_wrapper->filename_label().text(), m_project->name()));
 }
 
 }
