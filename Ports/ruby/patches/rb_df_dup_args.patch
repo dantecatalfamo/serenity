@@ -1,0 +1,11 @@
+--- ruby-3.0.2/include/ruby/internal/intern/select/posix.h	2021-07-07 06:08:35.000000000 -0400
++++ ruby-3.0.2/include/ruby/internal/intern/select/posix.h.new	2021-08-20 17:16:10.079063668 -0400
+@@ -55,7 +55,7 @@
+ }
+ 
+ static inline void
+-rb_fd_dup(rb_fdset_t *dst, const fd_set *src, int n)
++rb_fd_dup(rb_fdset_t *dst, const fd_set *src) // HACK: SerenityOS
+ {
+     *dst = *src;
+ }
